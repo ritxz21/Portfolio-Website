@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   Every colour on this site is named ONCE, here.
+   Nothing anywhere else hardcodes a colour.
+   Change a value below and the whole site updates.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root,
+[data-theme="dark"] {
+  /* backgrounds, from furthest back to closest to you */
+  --surface-base: #16161a;
+  --surface-raised: #1e1e24;
+  --surface-overlay: #26262e;
+
+  /* text, from loudest to quietest */
+  --text-heading: #f4f2ee;
+  --text-body: #d6d2cb;
+  --text-muted: #928d85;
+
+  /* lines */
+  --border-subtle: #2c2c34;
+  --border-strong: #45454f;
+
+  /* accents */
+  --accent-primary: #e3b23c;
+  --accent-secondary: #7fb5a6;
+  --accent-warning: #d98a5a;
+}
+
+[data-theme="light"] {
+  --surface-base: #faf8f5;
+  --surface-raised: #ffffff;
+  --surface-overlay: #f0ede8;
+
+  --text-heading: #1a1a1f;
+  --text-body: #3d3d45;
+  --text-muted: #75716b;
+
+  --border-subtle: #e5e0d8;
+  --border-strong: #c9c3b8;
+
+  --accent-primary: #8a5e0c;
+  --accent-secondary: #35705f;
+  --accent-warning: #a8531f;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Hand the tokens to Tailwind so you can write
+   `bg-surface`, `text-heading`, `border-subtle`, `text-accent`
+   instead of long CSS-variable strings.
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  --color-surface: var(--surface-base);
+  --color-raised: var(--surface-raised);
+  --color-overlay: var(--surface-overlay);
+
+  --color-heading: var(--text-heading);
+  --color-body: var(--text-body);
+  --color-muted: var(--text-muted);
+
+  --color-subtle: var(--border-subtle);
+  --color-strong: var(--border-strong);
+
+  --color-accent: var(--accent-primary);
+  --color-accent-2: var(--accent-secondary);
+  --color-accent-warn: var(--accent-warning);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-reenie), cursive;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Base styles
+   ═══════════════════════════════════════════════════════════════ */
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--surface-base);
+  color: var(--text-body);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--accent-primary);
+  color: var(--surface-base);
+}
