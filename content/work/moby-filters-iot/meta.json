@@ -1,0 +1,19 @@
+{
+  "slug": "moby-filters-iot",
+  "title": "Edge IoT Pipeline and a Local AI Workstation",
+  "org": "Moby Filters Inc.",
+  "role": "AI System and Automation Intern",
+  "category": "Professional",
+  "order": 75,
+  "dates": "May 2026 – Jul 2026",
+  "location": "New York, NY",
+  "blurb": "A real-time IoT pipeline for an industrial filtration system — Raspberry Pi edge nodes, MQTT, SQLite — with live sensor monitoring and automated fault detection. Plus a local Ubuntu workstation hosting LangGraph automation agents.",
+  "tags": [
+    "IoT",
+    "Raspberry Pi",
+    "MQTT",
+    "LangGraph",
+    "Ubuntu"
+  ],
+  "links": []
+}

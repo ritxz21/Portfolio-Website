@@ -96,3 +96,174 @@ body {
   background-color: var(--accent-primary);
   color: var(--surface-base);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Scroll reveal
+   The Reveal component adds .reveal-in once the element is visible.
+   ═══════════════════════════════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Flip cards
+   Two faces stacked on top of each other; hovering rotates the
+   container 180deg so the back comes forward.
+   On touch screens there is no hover, so the card stays flat and
+   shows its tags on the front instead.
+   ═══════════════════════════════════════════════════════════════ */
+
+.flip {
+  perspective: 1200px;
+}
+
+.flip-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+@media (hover: hover) {
+  .flip:hover .flip-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+/* No hover available: never flip, show the tags on the front. */
+@media (hover: none) {
+  .flip-inner {
+    transform: none !important;
+  }
+  .flip-back {
+    display: none;
+  }
+  .flip-face {
+    position: relative;
+    height: 100%;
+  }
+  .flip-touch-tags {
+    display: flex !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Long-form article styling
+   Applied to the rendered MDX on every write-up page.
+   ═══════════════════════════════════════════════════════════════ */
+
+.prose-custom {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.prose-custom h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-heading);
+}
+
+.prose-custom h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.prose-custom p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose-custom strong {
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.prose-custom a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-custom ul,
+.prose-custom ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose-custom ul {
+  list-style: disc;
+}
+.prose-custom ol {
+  list-style: decimal;
+}
+.prose-custom li {
+  margin: 0.5rem 0;
+}
+
+.prose-custom code {
+  border-radius: 4px;
+  background: var(--surface-overlay);
+  padding: 0.15em 0.4em;
+  font-size: 0.875em;
+}
+
+.prose-custom pre {
+  overflow-x: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  padding: 1rem;
+}
+
+.prose-custom pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-custom blockquote {
+  border-left: 2px solid var(--border-strong);
+  padding-left: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

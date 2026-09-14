@@ -1,0 +1,20 @@
+{
+  "slug": "columbia-policy-etl",
+  "title": "Structuring 50+ Unstructured Policy Documents",
+  "org": "Columbia University",
+  "role": "Research Assistant",
+  "category": "Research",
+  "order": 90,
+  "featured": true,
+  "dates": "Apr 2026 – Present",
+  "location": "New York, NY",
+  "blurb": "An end-to-end ETL pipeline turning 50+ unstructured university policy documents into a 54-feature dataset, then clustering it to find coverage patterns across institutions. Supporting a planned publication.",
+  "tags": [
+    "Python",
+    "ETL",
+    "Clustering",
+    "EDA",
+    "Research"
+  ],
+  "links": []
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "embedding-robustness",
+  "title": "Word Embedding Robustness Evaluation Framework",
+  "category": "Project",
+  "order": 95,
+  "featured": true,
+  "dates": "Dec 2025 – Feb 2026",
+  "blurb": "A Python framework that measures how badly data poisoning degrades Word2Vec, FastText, GloVe and BERT embeddings — three attack strategies, automated training pipelines, multiple evaluation metrics.",
+  "tags": [
+    "PyTorch",
+    "TensorFlow",
+    "NLP",
+    "Embeddings",
+    "Adversarial ML"
+  ],
+  "links": []
+}

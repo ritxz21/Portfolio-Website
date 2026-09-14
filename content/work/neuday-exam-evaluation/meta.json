@@ -1,0 +1,18 @@
+{
+  "slug": "neuday-exam-evaluation",
+  "title": "Automating Exam Grading with OCR and LLMs",
+  "org": "NeuDay AI",
+  "role": "AI Developer Intern",
+  "category": "Professional",
+  "order": 85,
+  "dates": "Aug 2024 – Dec 2024",
+  "location": "Pune, IN",
+  "blurb": "An exam evaluation system that reads scanned answer sheets and grades them against rubrics — automating ~90% of grading with a 35% consistency improvement over manual evaluation.",
+  "tags": [
+    "OCR",
+    "LLM",
+    "Python",
+    "Evaluation"
+  ],
+  "links": []
+}

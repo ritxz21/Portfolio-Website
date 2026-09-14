@@ -1,0 +1,21 @@
+{
+  "slug": "disease-prediction-dss",
+  "title": "A Decision Support System for Multi-Disease Prognosis",
+  "category": "Research",
+  "order": 70,
+  "dates": "Published 2024",
+  "blurb": "Published in IJARIIE. An ML prognosis system for diabetes, heart disease and Parkinson's using SVM, Random Forest and Logistic Regression, with a Streamlit interface for real-time clinical decision support.",
+  "tags": [
+    "Scikit-Learn",
+    "Streamlit",
+    "Healthcare ML",
+    "Publication"
+  ],
+  "links": [
+    {
+      "type": "paper",
+      "label": "Read on IJARIIE",
+      "url": ""
+    }
+  ]
+}

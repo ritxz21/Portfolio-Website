@@ -1,0 +1,21 @@
+{
+  "slug": "atlas-copco",
+  "title": "Agentic AI for Enterprise Data",
+  "org": "Atlas Copco",
+  "role": "Data Science Intern",
+  "category": "Professional",
+  "order": 100,
+  "featured": true,
+  "dates": "Jan 2025 – Jul 2025",
+  "location": "Pune, IN",
+  "blurb": "A natural-language-to-SQL agent that let non-technical teams query multi-database systems without writing SQL, plus a documentation agent for PowerBI built for a NASA client.",
+  "tags": [
+    "LLM",
+    "RAG",
+    "GraphRAG",
+    "Python",
+    "PowerBI",
+    "Azure"
+  ],
+  "links": []
+}

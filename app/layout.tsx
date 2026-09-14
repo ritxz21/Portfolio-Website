@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Reenie_Beanie } from "next/font/google";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 // next/font downloads these at build time and self-hosts them.
@@ -18,9 +21,8 @@ const reenie = Reenie_Beanie({
 });
 
 export const metadata: Metadata = {
-  title: "Ritika Chatterjee — Data Scientist & AI Engineer",
-  description:
-    "MS Data Science at Columbia. I build agentic AI systems, retrieval pipelines, and the data infrastructure underneath them.",
+  title: `${site.name} — ${site.role}`,
+  description: site.tagline,
 };
 
 export default function RootLayout({
@@ -34,7 +36,11 @@ export default function RootLayout({
       data-theme="dark"
       className={`${inter.variable} ${reenie.variable}`}
     >
-      <body>{children}</body>
+      <body className="flex min-h-screen flex-col">
+        <Nav />
+        <div className="flex-1">{children}</div>
+        <Footer />
+      </body>
     </html>
   );
 }

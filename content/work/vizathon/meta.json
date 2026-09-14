@@ -1,0 +1,20 @@
+{
+  "slug": "vizathon",
+  "title": "Vizathon 2.0 — Retail Sales Dashboard",
+  "category": "Project",
+  "order": 60,
+  "dates": "Nov 2023 – Dec 2023",
+  "blurb": "Winner of Vizathon 2.0, a nationwide data visualization hackathon judged by Wolters Kluwer. A real-time retail market sales analysis dashboard.",
+  "tags": [
+    "Data Visualization",
+    "Dashboards",
+    "Hackathon"
+  ],
+  "links": [
+    {
+      "type": "award",
+      "label": "Vizathon 2.0 — Winner",
+      "url": ""
+    }
+  ]
+}

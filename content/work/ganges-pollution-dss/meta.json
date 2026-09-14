@@ -1,0 +1,22 @@
+{
+  "slug": "ganges-pollution-dss",
+  "title": "Forecasting Ganges River Pollution",
+  "category": "Project",
+  "order": 80,
+  "featured": true,
+  "dates": "Aug 2024 – Dec 2024",
+  "blurb": "A real-time decision support system forecasting river pollution five days ahead with alerting. Led a 4-member team. Winner, Smart India Hackathon 2024.",
+  "tags": [
+    "Forecasting",
+    "Time Series",
+    "Python",
+    "Deployment"
+  ],
+  "links": [
+    {
+      "type": "award",
+      "label": "Smart India Hackathon 2024 — Winner",
+      "url": ""
+    }
+  ]
+}
