@@ -23,102 +23,101 @@ usually explain the question again because something got lost in
 translation. The bottleneck isn't the data. It's the translation layer, and
 that layer is a person.
 
-I spent six months building two systems that attack that bottleneck from
-opposite ends: one that lets people ask questions directly, and one that
-makes the underlying data models legible in the first place.
+I spent six months at Atlas Copco building two systems that attack that
+bottleneck from opposite ends: one that lets people ask questions directly,
+and one that makes the underlying data models legible in the first place.
 
-## Constraints
+{/* TODO(ritika): add a "Constraints" section here before this page is
+    really finished. The single most valuable thing you can write is what
+    you tried FIRST that didn't work — naive RAG over the schema? tables
+    retrieved by description similarity? hallucinated joins? Whatever it
+    was, one honest paragraph about the failure is worth more than
+    everything else on this page. */}
 
-{/* Three things made this harder than the demo version of this problem. */}
+## Asking questions in English
 
-**The schemas didn't line up.** This wasn't one warehouse with clean foreign
-keys. Queries had to reach across multiple database systems where the same
-concept had different names, and the relationships between tables weren't
-always written down anywhere a model could read.
+The first system is a natural-language-to-SQL agent. Someone types a
+question the way they'd ask a colleague, and gets an answer back — no SQL,
+no ticket, no waiting on an analyst.
 
-**Naive retrieval over the schema didn't work.** [FILL IN: what did you try
-first? Dumping table definitions into context, vector search over column
-descriptions? And what specifically failed — wrong joins, hallucinated
-columns, queries that ran but returned nonsense? This is the most valuable
-paragraph on the page. Be specific about the failure.]
+The hard part isn't generating SQL. Language models do that readily. The
+hard part is generating SQL that is *correct* against a real enterprise
+estate, where the relevant tables live in different databases and the same
+concept wears a different name in each one.
 
-**Enterprise environment.** [FILL IN: what were the deployment constraints?
-Azure-only, data that couldn't leave the tenant, approval processes? This is
-what separates enterprise work from a side project — say so.]
+Plain retrieval struggles here. If you search the schema for text similar to
+the question, you get tables that *sound* related. But which table actually
+joins to which, and on what key, is structural information — and similarity
+search throws structure away. So the agent uses GraphRAG: the schema is
+represented as a graph, with tables as nodes and their relationships as
+edges. Retrieval walks that graph from the entities named in the question
+to the tables that hold them, following joins that genuinely exist rather
+than joins a model inferred from column names that happened to rhyme.
 
-## What I built: a GraphRAG query agent
-
-{/* An architecture diagram goes here in Phase 3. */}
-
-Instead of treating the database schema as a pile of text to search, the
-system treats it as a graph. Tables are nodes, relationships are edges. When
-a question comes in, the agent doesn't retrieve the most similar-sounding
-table descriptions — it walks the graph from the entities in the question to
-the tables that actually hold them, following joins that exist rather than
-joins a language model imagined.
-
-[FILL IN: how did you build the graph? Extracted automatically from schema
-metadata and foreign keys, inferred by an LLM, hand-curated, some
-combination? How did you handle relationships that weren't formally
-declared?]
-
-<Callout kind="decision" title="Why a graph instead of plain retrieval">
-[FILL IN: the honest version. Plain retrieval over schema text finds tables
-that *sound* related to the question. But customer and client and account
-might be three tables in three databases, and knowing which one joins to
-what is structural information that similarity search throws away. Rewrite
-this in your own words with whatever the real reason was.]
+<Callout kind="decision" title="Why a graph rather than plain retrieval">
+A vector search over schema text answers "which tables sound like this
+question?". A graph answers "which tables are actually connected, and how?"
+For a single clean warehouse the first is enough. Across several databases
+with inconsistent naming, it isn't — the join path is the answer, and it's
+exactly the part flat retrieval can't see.
 </Callout>
 
-The output is a query the user never sees, and an answer they do. The point
+The output is a query the user never sees and an answer they do. The point
 was never to teach people SQL. It was to remove the step where they need it.
 
-## What I built: a PowerBI documentation agent
+{/* TODO(ritika): two things to add here when you have a moment —
+    1. How the graph was actually built. Extracted from foreign keys?
+       Inferred by an LLM from schema metadata? Hand-curated? Mixed?
+    2. Guardrails. Was the agent restricted to read-only queries? Did you
+       validate generated SQL before running it? Cap result sizes?
+       Interviewers ask this one, and "I thought about it" is a real
+       differentiator. */}
 
-The second system came out of a NASA client engagement, and it started from
-a complaint rather than a spec.
+## Documenting PowerBI, for a NASA client
+
+The second system came out of a client engagement with NASA, and it started
+from a complaint rather than a spec.
 
 PowerBI reports accumulate the same way databases do. Someone builds a
-dashboard, defines forty measures, and leaves the company. The measures
-still work. Nobody knows what they mean. The documentation, if it exists,
-was written once and has been wrong for a year.
+dashboard, defines forty measures, and eventually moves on. The measures
+still work. Nobody remembers what they mean. The documentation, if it
+exists, was written once and has been quietly wrong for a year.
 
 So I built an agent that reads the data model directly and generates
 structured documentation from it — what each measure computes, what it
 depends on, how the tables relate — and then lets people query that
 documentation in natural language. Asking what *utilisation rate* actually
-measures gets an answer grounded in the model itself, rather than in a wiki
-page someone forgot to update.
+measures returns an answer grounded in the model itself, rather than in a
+wiki page someone forgot to update.
 
-[FILL IN: how did you get at the model? PowerBI REST API, XMLA endpoint,
-parsing the .pbix? Which parts were easy and which fought you?]
+Two things follow from documentation being generated rather than written.
+It doesn't go stale, because it's derived from the thing it describes. And
+it's queryable, so nobody has to read forty pages to find one definition.
 
-It cut manual documentation effort by about 40% and improved query
-turnaround by roughly 30%. [FILL IN: how were those measured? Even a rough
-answer — compared against how long the team estimated the same
-documentation took by hand — is better than a bare number. If you're not
-sure, soften the claim rather than dropping it.]
+It cut manual documentation effort by roughly 40% and improved query
+turnaround by about 30%.
 
-## Decisions and tradeoffs
+{/* TODO(ritika): say how those two numbers were measured, even roughly.
+    "Compared against the team's estimate of how long the same
+    documentation took by hand" is fine and honest. A bare percentage
+    invites scepticism; a measured one invites a follow-up question, which
+    is what you want in an interview. Also worth noting: how did you get at
+    the model — PowerBI REST API, XMLA endpoint, parsing the .pbix? */}
 
-**[FILL IN: decision 1.]** [What did you choose, what was the alternative,
-and why did you pick yours? A model choice, a chunking strategy, a decision
-to keep a human in the loop before any query executed.]
+## What I took from it
 
-**[FILL IN: decision 2.]** [Something you got wrong first. This reads as
-more senior than anything you got right immediately.]
+Both systems are the same idea pointed at different targets: the
+organisation already knows the answer somewhere, and the work is building
+something that can find it and say it plainly. Neither one is a model
+problem. They're retrieval problems wearing model-shaped clothes, and most
+of the effort went into representing what already existed well enough that
+a language model could reason over it without guessing.
 
-**Guardrails.** [FILL IN: did you constrain the agent to read-only queries?
-Validate generated SQL before execution? Cap result sizes? An agent with
-database access is a liability without these, and saying how you handled it
-signals that you thought about production, not just the demo.]
-
-## What I'd do differently
-
-[FILL IN: one honest paragraph. Something like — the graph was built once
-and went stale as schemas changed, and a rebuild pipeline should have been
-part of v1. Or — I optimised retrieval before I had a way to measure whether
-retrieval was the actual problem. Whatever's true.]
+{/* TODO(ritika): replace or expand the section above with something more
+    specific once you've reread your notes. Ideally it ends with one thing
+    you'd do differently — the graph going stale as schemas changed and
+    needing a rebuild pipeline, optimising retrieval before you could
+    measure it, whatever's actually true. */}
 
 <Callout kind="note">
 Some specifics are omitted here — client data models and internal schemas
