@@ -26,7 +26,22 @@ export default async function WorkPage({
   }>({
     source: item.body,
     components: mdxComponents,
-    options: { parseFrontmatter: true },
+    options: {
+      parseFrontmatter: true,
+
+      // next-mdx-remote v6 defaults blockJS to true, which strips ALL
+      // curly-brace expressions out of the MDX — including the props of
+      // our own components, so <Metrics items={[...]} /> arrives with
+      // items undefined and the page crashes at build time.
+      //
+      // We author every .mdx file in this repo ourselves, so there's no
+      // untrusted MDX to defend against. blockDangerousJS stays on by
+      // default, which still blocks eval, Function, process and friends.
+      //
+      // If MDX ever comes from somewhere we don't control (a CMS, the
+      // chatbot, a contributor), revisit this.
+      blockJS: false,
+    },
   });
 
   return (
