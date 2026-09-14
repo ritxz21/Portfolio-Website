@@ -8,12 +8,34 @@ import { CATEGORIES } from "@/lib/types";
 const TABS = ["All", ...CATEGORIES] as const;
 type Tab = (typeof TABS)[number];
 
-/** One card. Flips on hover to show tags; on touch screens it stays flat. */
+/**
+ * One card.
+ * Hover  -> faint golden glow and a barely-there lift.
+ * Click  -> flips to the back, which holds the tags and the read-more link.
+ * Click again flips it back.
+ */
 function Card({ item }: { item: WorkMeta }) {
+  const [flipped, setFlipped] = useState(false);
+
+  const toggle = () => setFlipped((f) => !f);
+
   return (
-    <Link href={`/work/${item.slug}`} className="flip block h-72">
-      <div className="flip-inner rounded-lg border border-subtle bg-raised transition-colors hover:border-accent">
-        {/* FRONT */}
+    <div
+      className={`flip h-72 ${flipped ? "is-flipped" : ""}`}
+      onClick={toggle}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-pressed={flipped}
+      aria-label={`${item.title} — press to see details`}
+    >
+      <div className="flip-inner">
+        {/* ── FRONT ─────────────────────────────────────── */}
         <div className="flip-face flex flex-col p-6">
           <div className="flex items-baseline justify-between gap-3">
             <span className="text-[11px] font-medium tracking-wider text-accent uppercase">
@@ -31,20 +53,12 @@ function Card({ item }: { item: WorkMeta }) {
 
           <p className="mt-3 line-clamp-4 text-sm text-body">{item.blurb}</p>
 
-          {/* Shown only on touch screens, where there's no hover to flip with */}
-          <div className="flip-touch-tags mt-auto hidden flex-wrap gap-1.5 pt-3">
-            {item.tags.slice(0, 4).map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-subtle px-2 py-0.5 text-[10px] text-muted"
-              >
-                {t}
-              </span>
-            ))}
+          <div className="mt-auto pt-3 text-[11px] text-muted opacity-70">
+            tap for details
           </div>
         </div>
 
-        {/* BACK */}
+        {/* ── BACK ──────────────────────────────────────── */}
         <div className="flip-face flip-back flex flex-col justify-between p-6">
           <div>
             <div className="text-[11px] font-medium tracking-wider text-accent uppercase">
@@ -62,10 +76,17 @@ function Card({ item }: { item: WorkMeta }) {
             </div>
           </div>
 
-          <div className="text-sm text-accent">Read more &rarr;</div>
+          {/* stopPropagation so following the link doesn't also flip the card */}
+          <Link
+            href={`/work/${item.slug}`}
+            onClick={(e) => e.stopPropagation()}
+            className="text-sm font-medium text-accent hover:underline"
+          >
+            Read more &rarr;
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -99,9 +120,7 @@ export function WorkGrid({ items }: { items: WorkMeta[] }) {
               }`}
             >
               {t}
-              <span className={active ? "ml-1.5 opacity-70" : "ml-1.5 opacity-60"}>
-                {counts[t]}
-              </span>
+              <span className="ml-1.5 opacity-65">{counts[t]}</span>
             </button>
           );
         })}

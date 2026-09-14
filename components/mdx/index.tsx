@@ -1,5 +1,8 @@
 import { Metrics } from "./Metrics";
 import { Callout } from "./Callout";
+import { Diagram } from "./Diagram";
+import { Flow } from "./Flow";
+import { Detail, Pane } from "./Detail";
 
 // ═══════════════════════════════════════════════════════════════
 // Anything listed here can be used inside an .mdx file without
@@ -10,4 +13,8 @@ import { Callout } from "./Callout";
 export const mdxComponents = {
   Metrics,
   Callout,
+  Diagram,
+  Flow,
+  Detail,
+  Pane,
 };

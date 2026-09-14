@@ -124,22 +124,42 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Flip cards
-   Two faces stacked on top of each other; hovering rotates the
-   container 180deg so the back comes forward.
-   On touch screens there is no hover, so the card stays flat and
-   shows its tags on the front instead.
+   Work cards
+
+   Hover  -> faint golden wash, a soft glow, and a 2% lift.
+   Click  -> the inner container rotates 180deg (React adds .is-flipped).
+
+   The rotation lives on .flip-inner and the hover scale on .flip, so the
+   two transforms never fight each other.
    ═══════════════════════════════════════════════════════════════ */
 
 .flip {
   perspective: 1200px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.flip:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
+  border-radius: 0.6rem;
+}
+
+@media (hover: hover) {
+  .flip:hover {
+    transform: scale(1.02);
+  }
 }
 
 .flip-inner {
   position: relative;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.flip.is-flipped .flip-inner {
+  transform: rotateY(180deg);
 }
 
 .flip-face {
@@ -147,38 +167,45 @@ body {
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--surface-raised);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .flip-back {
   transform: rotateY(180deg);
 }
 
+/* the golden glow */
 @media (hover: hover) {
-  .flip:hover .flip-inner {
-    transform: rotateY(180deg);
-  }
-}
-
-/* No hover available: never flip, show the tags on the front. */
-@media (hover: none) {
-  .flip-inner {
-    transform: none !important;
-  }
-  .flip-back {
-    display: none;
-  }
-  .flip-face {
-    position: relative;
-    height: 100%;
-  }
-  .flip-touch-tags {
-    display: flex !important;
+  .flip:hover .flip-face {
+    border-color: color-mix(
+      in srgb,
+      var(--accent-primary) 40%,
+      var(--border-subtle)
+    );
+    background-color: color-mix(
+      in srgb,
+      var(--accent-primary) 4%,
+      var(--surface-raised)
+    );
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent-primary) 15%, transparent),
+      0 10px 30px -14px color-mix(in srgb, var(--accent-primary) 60%, transparent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .flip,
   .flip-inner {
     transition: none;
+  }
+  .flip:hover {
+    transform: none;
   }
 }
 
