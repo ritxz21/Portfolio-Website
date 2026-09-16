@@ -1,6 +1,7 @@
 # Portfolio Website
 
 Personal site for Ritika Chatterjee — MS Data Science, Columbia University.
+Website - https://ritikachatterjee.vercel.app
 
 ## Stack
 
