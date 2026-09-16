@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllWork } from "@/lib/content";
+import { getAllWork, getDraftCount } from "@/lib/content";
 import { site } from "@/lib/site";
 import { StatTiles } from "@/components/StatTiles";
 import { WorkGrid } from "@/components/WorkGrid";
@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 
 export default function Home() {
   const work = getAllWork();
+  const drafts = getDraftCount();
 
   return (
     <main>
@@ -54,11 +55,24 @@ export default function Home() {
       {/* ── WORK ───────────────────────────────────────────── */}
       <section id="work" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-16">
         <Reveal>
-          <div className="mb-10">
-            <p className="font-hand text-2xl text-muted">some of my</p>
-            <h2 className="text-4xl font-semibold tracking-tight text-heading">
-              Work
-            </h2>
+          <div className="mb-10 flex flex-wrap items-end gap-x-5 gap-y-2">
+            <div>
+              <p className="font-hand text-2xl text-muted">some of my</p>
+              <h2 className="text-4xl font-semibold tracking-tight text-heading">
+                Work
+              </h2>
+            </div>
+
+            {/* Reads the real number of drafted pages, so it can never
+                go stale — publish one and the count drops by itself. */}
+            {drafts > 0 && (
+              <p
+                className="font-hand text-2xl text-accent"
+                style={{ transform: "rotate(-4deg)" }}
+              >
+                + {drafts} more, still writing them up!
+              </p>
+            )}
           </div>
           <WorkGrid items={work} />
         </Reveal>
