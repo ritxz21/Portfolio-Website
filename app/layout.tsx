@@ -29,6 +29,7 @@ export const metadata: Metadata = {
 // get a flash of dark first. It has to be a raw string: this must execute
 // before React hydrates.
 const themeScript = `
+document.documentElement.classList.add('js');
 try {
   var saved = localStorage.getItem('theme');
   if (saved === 'light' || saved === 'dark') {

@@ -54,6 +54,16 @@ edges. Retrieval walks that graph from the entities named in the question
 to the tables that hold them, following joins that genuinely exist rather
 than joins a model inferred from column names that happened to rhyme.
 
+<Flow
+  caption="Query path through the GraphRAG agent."
+  steps={[
+    { label: "Question", note: "asked in plain English" },
+    { label: "Entity extraction", note: "what is being asked about" },
+    { label: "Schema graph walk", note: "joins that actually exist" },
+    { label: "SQL generation", note: "run, then answered in words" }
+  ]}
+/>
+
 <Callout kind="decision" title="Why a graph rather than plain retrieval">
 A vector search over schema text answers "which tables sound like this
 question?". A graph answers "which tables are actually connected, and how?"
@@ -90,9 +100,27 @@ documentation in natural language. Asking what *utilisation rate* actually
 measures returns an answer grounded in the model itself, rather than in a
 wiki page someone forgot to update.
 
+<Detail>
+<Pane label="Overview">
+
 Two things follow from documentation being generated rather than written.
 It doesn't go stale, because it's derived from the thing it describes. And
 it's queryable, so nobody has to read forty pages to find one definition.
+
+</Pane>
+<Pane label="Technical">
+
+{/* TODO(ritika): this pane is where the implementation detail goes —
+    how the model was read, how measures and dependencies were extracted,
+    how the generated docs were indexed for natural-language querying.
+    Until you fill it in, feel free to delete the whole <Detail> wrapper
+    and keep just the Overview text. */}
+
+The implementation detail goes here.
+
+</Pane>
+</Detail>
+
 
 It cut manual documentation effort by roughly 40% and improved query
 turnaround by about 30%.

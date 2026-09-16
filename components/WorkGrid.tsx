@@ -53,8 +53,31 @@ function Card({ item }: { item: WorkMeta }) {
 
           <p className="mt-3 line-clamp-4 text-sm text-body">{item.blurb}</p>
 
-          <div className="mt-auto pt-3 text-[11px] text-muted opacity-70">
-            tap for details
+          <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+            {item.award ? (
+              <span className="inline-flex items-center gap-1 rounded-full border border-accent/50 px-2 py-0.5 text-[10px] font-medium text-accent">
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z" />
+                  <path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3" />
+                </svg>
+                {item.award}
+              </span>
+            ) : (
+              <span />
+            )}
+            <span className="text-[11px] text-muted opacity-70">
+              tap for details
+            </span>
           </div>
         </div>
 

@@ -5,7 +5,12 @@
 // silently rendering something broken.
 // ═══════════════════════════════════════════════════════════════
 
-export const CATEGORIES = ["Research", "Project", "Professional"] as const;
+export const CATEGORIES = [
+  "Research",
+  "Project",
+  "Professional",
+  "Award",
+] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export type LinkType = "repo" | "paper" | "demo" | "award" | "site";
@@ -29,6 +34,8 @@ export type WorkMeta = {
   /** Sorts the card grid. Higher shows first. */
   order: number;
   featured?: boolean;
+  /** Short badge shown on the card, e.g. "Winner". Omit for no badge. */
+  award?: string;
   /** Empty array is fine — the card just renders no links. */
   links: WorkLink[];
 };
