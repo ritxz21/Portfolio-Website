@@ -77,6 +77,15 @@ export function getDraftCount(): number {
   return readAll().filter((w) => w.draft).length;
 }
 
+/**
+ * Every item, drafts included. Only for the chatbot's knowledge base:
+ * a drafted page's blurb still describes real work accurately, even
+ * though the page itself isn't ready to publish.
+ */
+export function getAllWorkWithDrafts(): WorkMeta[] {
+  return readAll();
+}
+
 /** One item, with its MDX body. Returns null if the slug doesn't exist. */
 export function getWork(slug: string): WorkItem | null {
   const dir = path.join(WORK_DIR, slug);

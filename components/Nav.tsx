@@ -17,6 +17,9 @@ export function Nav() {
           <Link href="/work" className="transition-colors hover:text-accent">
             Work
           </Link>
+          <Link href="/ask" className="transition-colors hover:text-accent">
+            Ask
+          </Link>
           <a
             href={site.links.resume}
             target="_blank"

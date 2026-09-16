@@ -4,6 +4,7 @@ import { site } from "@/lib/site";
 import { StatTiles } from "@/components/StatTiles";
 import { WorkGrid } from "@/components/WorkGrid";
 import { Reveal } from "@/components/Reveal";
+import { AskBox } from "@/components/AskBox";
 
 export default function Home() {
   const work = getAllWork();
@@ -75,6 +76,20 @@ export default function Home() {
             )}
           </div>
           <WorkGrid items={work} />
+        </Reveal>
+      </section>
+
+      {/* ── ASK ────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-3xl px-6 py-20 text-center">
+        <Reveal>
+          <p className="font-hand text-2xl text-muted">curious about something?</p>
+          <h2 className="mt-1 mb-8 text-3xl font-semibold tracking-tight text-heading">
+            Just ask
+          </h2>
+          <AskBox />
+          <p className="mt-4 text-xs text-muted">
+            Answers come only from what&apos;s written on this site.
+          </p>
         </Reveal>
       </section>
 
