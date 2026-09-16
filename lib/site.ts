@@ -12,6 +12,20 @@ export const site = {
   tagline:
     "MS Data Science at Columbia. I build agentic AI systems, retrieval pipelines, and the data plumbing underneath them.",
 
+
+  /**
+   * The site's own address. Used for link previews, the sitemap and
+   * canonical URLs — all of which need an absolute URL, not a relative one.
+   *
+   * Vercel fills this in automatically from the deployment. You only need
+   * to set NEXT_PUBLIC_SITE_URL yourself once you have a custom domain.
+   */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:3000"),
+
   email: "rc3828@columbia.edu",
 
   links: {

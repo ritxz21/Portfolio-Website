@@ -6,7 +6,8 @@
   "category": "Research",
   "order": 90,
   "featured": true,
-  "dates": "Apr 2026 – Present",
+  "draft": true,
+  "dates": "Apr 2026 \u2013 Present",
   "location": "New York, NY",
   "blurb": "An end-to-end ETL pipeline turning 50+ unstructured university policy documents into a 54-feature dataset, then clustering it to find coverage patterns across institutions. Supporting a planned publication.",
   "tags": [

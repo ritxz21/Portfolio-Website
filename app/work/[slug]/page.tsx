@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -9,6 +10,37 @@ import { mdxComponents } from "@/components/mdx";
 // rendered on demand, so pages load instantly and hosting is free.
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
+}
+
+// Gives each write-up its own browser-tab title and its own link preview,
+// instead of every page sharing the homepage's.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const item = getWork(slug);
+  if (!item) return {};
+
+  const title = item.org ? `${item.title} — ${item.org}` : item.title;
+
+  return {
+    title,
+    description: item.blurb,
+    openGraph: {
+      type: "article",
+      title,
+      description: item.blurb,
+      url: `/work/${item.slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: item.blurb,
+    },
+    alternates: { canonical: `/work/${item.slug}` },
+  };
 }
 
 export default async function WorkPage({

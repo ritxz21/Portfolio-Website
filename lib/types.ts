@@ -36,6 +36,11 @@ export type WorkMeta = {
   featured?: boolean;
   /** Short badge shown on the card, e.g. "Winner". Omit for no badge. */
   award?: string;
+  /**
+   * true  -> visible while you work locally, invisible on the live site.
+   * Set it on anything half-written. Delete the line to publish.
+   */
+  draft?: boolean;
   /** Empty array is fine — the card just renders no links. */
   links: WorkLink[];
 };

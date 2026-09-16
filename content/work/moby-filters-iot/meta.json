@@ -5,9 +5,9 @@
   "role": "AI System and Automation Intern",
   "category": "Professional",
   "order": 75,
-  "dates": "May 2026 – Jul 2026",
+  "dates": "May 2026 \u2013 Jul 2026",
   "location": "New York, NY",
-  "blurb": "A real-time IoT pipeline for an industrial filtration system — Raspberry Pi edge nodes, MQTT, SQLite — with live sensor monitoring and automated fault detection. Plus a local Ubuntu workstation hosting LangGraph automation agents.",
+  "blurb": "A real-time IoT pipeline for an industrial filtration system \u2014 Raspberry Pi edge nodes, MQTT, SQLite \u2014 with live sensor monitoring and automated fault detection. Plus a local Ubuntu workstation hosting LangGraph automation agents.",
   "tags": [
     "IoT",
     "Raspberry Pi",
@@ -15,5 +15,6 @@
     "LangGraph",
     "Ubuntu"
   ],
-  "links": []
+  "links": [],
+  "draft": true
 }

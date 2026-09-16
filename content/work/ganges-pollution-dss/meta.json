@@ -4,6 +4,7 @@
   "category": "Project",
   "order": 80,
   "featured": true,
+  "draft": true,
   "award": "Winner",
   "dates": "Aug 2024 \u2013 Dec 2024",
   "blurb": "A real-time decision support system forecasting river pollution five days ahead with alerting. Led a 4-member team. Winner, Smart India Hackathon 2024.",

@@ -3,7 +3,7 @@
   "title": "Global Film Trends and Audience Engagement",
   "category": "Project",
   "order": 65,
-  "dates": "Nov 2025 – Dec 2025",
+  "dates": "Nov 2025 \u2013 Dec 2025",
   "blurb": "An R/Quarto analysis of IMDb data: how ratings shifted across decades, what COVID did to audience engagement, genre popularity over time, and how streaming widened cross-country release reach.",
   "tags": [
     "R",
@@ -11,5 +11,6 @@
     "Data Visualization",
     "EDA"
   ],
-  "links": []
+  "links": [],
+  "draft": true
 }

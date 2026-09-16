@@ -4,6 +4,13 @@ import { CATEGORIES, type WorkMeta, type WorkItem } from "./types";
 
 const WORK_DIR = path.join(process.cwd(), "content", "work");
 
+/**
+ * Drafts are visible while you're working locally and invisible on the
+ * live site. `npm run dev` shows everything; `npm run build` — which is
+ * what Vercel runs — drops anything marked draft.
+ */
+const SHOW_DRAFTS = process.env.NODE_ENV === "development";
+
 // ═══════════════════════════════════════════════════════════════
 // Validation
 // Runs at build time. A typo in a meta.json stops the build with
@@ -27,6 +34,9 @@ function validate(raw: unknown, slug: string): WorkMeta {
   if (m.links !== undefined && !Array.isArray(m.links)) {
     fail("`links` must be an array (use [] if there are none)");
   }
+  if (m.draft !== undefined && typeof m.draft !== "boolean") {
+    fail("`draft` must be true or false");
+  }
 
   return {
     ...(m as object),
@@ -40,8 +50,7 @@ function validate(raw: unknown, slug: string): WorkMeta {
 // Reading
 // ═══════════════════════════════════════════════════════════════
 
-/** Every folder under content/work/, validated and sorted. */
-export function getAllWork(): WorkMeta[] {
+function readAll(): WorkMeta[] {
   if (!fs.existsSync(WORK_DIR)) return [];
 
   return fs
@@ -57,6 +66,17 @@ export function getAllWork(): WorkMeta[] {
     .sort((a, b) => b.order - a.order);
 }
 
+/** Every published folder under content/work/, validated and sorted. */
+export function getAllWork(): WorkMeta[] {
+  const all = readAll();
+  return SHOW_DRAFTS ? all : all.filter((w) => !w.draft);
+}
+
+/** Including drafts — used by the "N drafts hidden" note in dev. */
+export function getDraftCount(): number {
+  return readAll().filter((w) => w.draft).length;
+}
+
 /** One item, with its MDX body. Returns null if the slug doesn't exist. */
 export function getWork(slug: string): WorkItem | null {
   const dir = path.join(WORK_DIR, slug);
@@ -66,10 +86,16 @@ export function getWork(slug: string): WorkItem | null {
   if (!fs.existsSync(metaFile) || !fs.existsSync(mdxFile)) return null;
 
   const meta = validate(JSON.parse(fs.readFileSync(metaFile, "utf8")), slug);
+  if (meta.draft && !SHOW_DRAFTS) return null;
+
   return { ...meta, body: fs.readFileSync(mdxFile, "utf8") };
 }
 
-/** Just the slugs — used to pre-render every page at build time. */
+/**
+ * Just the slugs — used to pre-render every page at build time.
+ * Drafts are excluded, so a draft page is never generated and a direct
+ * visit to its URL 404s.
+ */
 export function getAllSlugs(): string[] {
   return getAllWork().map((w) => w.slug);
 }

@@ -4,8 +4,9 @@
   "category": "Project",
   "order": 95,
   "featured": true,
-  "dates": "Dec 2025 – Feb 2026",
-  "blurb": "A Python framework that measures how badly data poisoning degrades Word2Vec, FastText, GloVe and BERT embeddings — three attack strategies, automated training pipelines, multiple evaluation metrics.",
+  "draft": true,
+  "dates": "Dec 2025 \u2013 Feb 2026",
+  "blurb": "A Python framework that measures how badly data poisoning degrades Word2Vec, FastText, GloVe and BERT embeddings \u2014 three attack strategies, automated training pipelines, multiple evaluation metrics.",
   "tags": [
     "PyTorch",
     "TensorFlow",

@@ -41,7 +41,15 @@ function Card({ item }: { item: WorkMeta }) {
             <span className="text-[11px] font-medium tracking-wider text-accent uppercase">
               {item.category}
             </span>
-            <span className="text-[11px] text-muted">{item.dates}</span>
+            {item.draft ? (
+              // Drafts never reach the live site, so this only ever shows
+              // while you're working locally.
+              <span className="rounded border border-accent-warn px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-accent-warn uppercase">
+                Draft
+              </span>
+            ) : (
+              <span className="text-[11px] text-muted">{item.dates}</span>
+            )}
           </div>
 
           <h3 className="mt-3 text-lg leading-snug font-medium text-heading">

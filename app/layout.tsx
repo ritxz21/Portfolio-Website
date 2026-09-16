@@ -21,8 +21,32 @@ const reenie = Reenie_Beanie({
 });
 
 export const metadata: Metadata = {
-  title: `${site.name} — ${site.role}`,
+  // metadataBase turns relative URLs (like the generated OG image) into
+  // absolute ones. Link previews break without it.
+  metadataBase: new URL(site.url),
+
+  title: {
+    default: `${site.name} — ${site.role}`,
+    // Every other page renders as "Page title · Ritika Chatterjee"
+    template: `%s · ${site.name}`,
+  },
   description: site.tagline,
+
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: `${site.name} — ${site.role}`,
+    description: site.tagline,
+    url: site.url,
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} — ${site.role}`,
+    description: site.tagline,
+  },
+
+  alternates: { canonical: "/" },
 };
 
 // Runs before the page paints, so someone who picked light mode doesn't
