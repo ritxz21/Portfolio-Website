@@ -1,6 +1,7 @@
 # Portfolio Website
 
 Personal site for Ritika Chatterjee — MS Data Science, Columbia University.
+Website - https://ritikachatterjee.vercel.app
 
 ## Stack
 
@@ -9,14 +10,6 @@ Personal site for Ritika Chatterjee — MS Data Science, Columbia University.
 - **MDX** for long-form project write-ups (coming in Phase 1)
 - Deployed free on **Vercel**
 
-## Running it locally
-
-```bash
-npm install
-npm run dev
-```
-
-Then open http://localhost:3000
 
 ## Project layout
 
