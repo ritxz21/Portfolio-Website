@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { ThemeToggle } from "./ThemeToggle";
+import { ThemeStudio } from "./ThemeStudio";
 
 export function Nav() {
   return (
@@ -45,6 +46,7 @@ export function Nav() {
             LinkedIn
           </a>
           <ThemeToggle />
+          <ThemeStudio />
         </div>
       </nav>
     </header>
