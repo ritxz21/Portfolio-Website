@@ -10,14 +10,18 @@ type Tab = (typeof TABS)[number];
 
 /**
  * One card.
- * Hover  -> faint golden glow and a barely-there lift.
- * Click  -> flips to the back, which holds the tags and the read-more link.
- * Click again flips it back.
+ * Hover -> faint golden glow and a barely-there lift.
+ * Click -> flips to the back, which holds the full tag list and any
+ *          external links the front had no room for.
+ * "Read more" goes straight to the write-up from either face.
  */
 function Card({ item }: { item: WorkMeta }) {
   const [flipped, setFlipped] = useState(false);
-
   const toggle = () => setFlipped((f) => !f);
+
+  const shown = item.tags.slice(0, 4);
+  const hidden = item.tags.length - shown.length;
+  const links = item.links.filter((l) => l.url);
 
   return (
     <div
@@ -42,8 +46,6 @@ function Card({ item }: { item: WorkMeta }) {
               {item.category}
             </span>
             {item.draft ? (
-              // Drafts never reach the live site, so this only ever shows
-              // while you're working locally.
               <span className="rounded border border-accent-warn px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-accent-warn uppercase">
                 Draft
               </span>
@@ -52,14 +54,31 @@ function Card({ item }: { item: WorkMeta }) {
             )}
           </div>
 
-          <h3 className="mt-3 text-lg leading-snug font-medium text-heading">
+          <h3 className="mt-2.5 text-lg leading-snug font-medium text-heading">
             {item.title}
           </h3>
           {item.org && (
             <div className="mt-0.5 text-sm text-muted">{item.org}</div>
           )}
 
-          <p className="mt-3 line-clamp-4 text-sm text-body">{item.blurb}</p>
+          <p className="mt-2.5 line-clamp-3 text-sm text-body">{item.blurb}</p>
+
+          {/* tags visible without flipping — the point is scanning */}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {shown.map((t) => (
+              <span
+                key={t}
+                className="rounded-full border border-subtle px-2 py-0.5 text-[10px] text-muted"
+              >
+                {t}
+              </span>
+            ))}
+            {hidden > 0 && (
+              <span className="px-1 py-0.5 text-[10px] text-muted">
+                +{hidden}
+              </span>
+            )}
+          </div>
 
           <div className="mt-auto flex items-center justify-between gap-2 pt-3">
             {item.award ? (
@@ -83,15 +102,21 @@ function Card({ item }: { item: WorkMeta }) {
             ) : (
               <span />
             )}
-            <span className="text-[11px] text-muted opacity-70">
-              tap for details
-            </span>
+
+            {/* stopPropagation, or clicking the link would also flip the card */}
+            <Link
+              href={`/work/${item.slug}`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-xs font-medium text-accent hover:underline"
+            >
+              Read more &rarr;
+            </Link>
           </div>
         </div>
 
         {/* ── BACK ──────────────────────────────────────── */}
         <div className="flip-face flip-back flex flex-col justify-between p-6">
-          <div>
+          <div className="min-h-0 overflow-hidden">
             <div className="text-[11px] font-medium tracking-wider text-accent uppercase">
               Built with
             </div>
@@ -105,9 +130,25 @@ function Card({ item }: { item: WorkMeta }) {
                 </span>
               ))}
             </div>
+
+            {links.length > 0 && (
+              <div className="mt-4 flex flex-col gap-1">
+                {links.map((l) => (
+                  <a
+                    key={l.label}
+                    href={l.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs text-muted hover:text-accent hover:underline"
+                  >
+                    {l.label} &rarr;
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* stopPropagation so following the link doesn't also flip the card */}
           <Link
             href={`/work/${item.slug}`}
             onClick={(e) => e.stopPropagation()}
@@ -123,6 +164,7 @@ function Card({ item }: { item: WorkMeta }) {
 
 export function WorkGrid({ items }: { items: WorkMeta[] }) {
   const [tab, setTab] = useState<Tab>("All");
+  const [query, setQuery] = useState("");
 
   const counts = useMemo(() => {
     const c: Record<string, number> = { All: items.length };
@@ -132,7 +174,20 @@ export function WorkGrid({ items }: { items: WorkMeta[] }) {
     return c;
   }, [items]);
 
-  const shown = tab === "All" ? items : items.filter((i) => i.category === tab);
+  // Category tab AND text query. The query matches tags, title and org,
+  // so "PyTorch", "Columbia" and "hackathon" all find something.
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return items.filter((i) => {
+      if (tab !== "All" && i.category !== tab) return false;
+      if (!q) return true;
+      return (
+        i.tags.some((t) => t.toLowerCase().includes(q)) ||
+        i.title.toLowerCase().includes(q) ||
+        (i.org ?? "").toLowerCase().includes(q)
+      );
+    });
+  }, [items, tab, query]);
 
   return (
     <div>
@@ -157,12 +212,37 @@ export function WorkGrid({ items }: { items: WorkMeta[] }) {
         })}
       </div>
 
-      {/* cards */}
-      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {shown.map((item) => (
-          <Card key={item.slug} item={item} />
-        ))}
+      {/* tech search */}
+      <div className="relative mt-3">
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Filter by tech, title or place…"
+          className="w-full rounded-full border border-subtle bg-raised px-5 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-accent"
+        />
+        {query && (
+          <button
+            onClick={() => setQuery("")}
+            aria-label="Clear filter"
+            className="absolute top-1/2 right-4 -translate-y-1/2 text-sm text-muted hover:text-accent"
+          >
+            ✕
+          </button>
+        )}
       </div>
+
+      {/* cards */}
+      {shown.length === 0 ? (
+        <p className="mt-10 text-center font-hand text-2xl text-muted">
+          nothing matches that — try another word?
+        </p>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((item) => (
+            <Card key={item.slug} item={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -6,6 +6,14 @@ import Link from "next/link";
 
 type Msg = { role: "user" | "model"; text: string };
 
+const TOPICS = [
+  { label: "Work", question: "Where has Ritika worked, and what did she do there?" },
+  { label: "Projects", question: "What projects has Ritika built?" },
+  { label: "Education", question: "What has Ritika studied?" },
+  { label: "Skills", question: "What are Ritika's technical skills?" },
+  { label: "Contact", question: "How do I get in touch with Ritika?" },
+];
+
 const SUGGESTIONS = [
   "What has Ritika actually built?",
   "Does she know PyTorch?",
@@ -147,12 +155,27 @@ export function Chat() {
         <div ref={bottom} />
       </div>
 
+      {/* Always-available entry points, so there's a way in even
+          mid-conversation — not just on an empty screen. */}
+      <div className="sticky bottom-[4.75rem] mt-8 flex flex-wrap justify-center gap-4 pb-2 text-xs text-muted">
+        {TOPICS.map((t) => (
+          <button
+            key={t.label}
+            onClick={() => send(t.question)}
+            disabled={busy}
+            className="transition-colors hover:text-accent disabled:opacity-40"
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
           void send(input);
         }}
-        className="sticky bottom-6 mt-8 flex gap-2"
+        className="sticky bottom-6 flex gap-2"
       >
         <input
           value={input}
