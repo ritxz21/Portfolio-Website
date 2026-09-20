@@ -1,0 +1,14 @@
+{
+  "slug": "erp-sql-agent",
+  "title": "Asking the Data Warehouse in English",
+  "org": "Atlas Copco",
+  "role": "Data Science Intern",
+  "category": "Professional",
+  "order": 100,
+  "featured": true,
+  "dates": "Jan 2025 – Jul 2025",
+  "location": "Pune, IN",
+  "blurb": "A chatbot inside the company ERP that answers data questions in plain English. Non-technical staff stopped filing tickets with the data team and waiting days. Agentic AI with a knowledge graph as one of its tools, scoped to each person's Azure access group.",
+  "tags": ["LLM", "Agentic AI", "Knowledge Graph", "RAG", "SQL", "Azure"],
+  "links": []
+}

@@ -50,20 +50,59 @@ function validate(raw: unknown, slug: string): WorkMeta {
 // Reading
 // ═══════════════════════════════════════════════════════════════
 
+/**
+ * Reads one folder. Returns null instead of throwing in development, so a
+ * half-saved file you're in the middle of editing doesn't blank the whole
+ * site. A production build still fails loudly — broken content should never
+ * reach the live site quietly.
+ */
+function readOne(slug: string): WorkMeta | null {
+  const file = path.join(WORK_DIR, slug, "meta.json");
+
+  const fail = (msg: string): null => {
+    if (!SHOW_DRAFTS) throw new Error(msg); // production build
+    console.warn(`[content] skipping ${slug}: ${msg}`);
+    return null;
+  };
+
+  if (!fs.existsSync(file)) return fail(`content/work/${slug}/ has no meta.json`);
+
+  let raw: string;
+  try {
+    // strip a UTF-8 BOM — some Windows editors add one, and JSON.parse
+    // rejects it with a message that names neither the file nor the reason
+    raw = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "");
+  } catch (e) {
+    return fail(`content/work/${slug}/meta.json could not be read: ${e}`);
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    const detail = e instanceof Error ? e.message : String(e);
+    return fail(
+      `content/work/${slug}/meta.json is not valid JSON — ${detail}. ` +
+        `A trailing comma or a missing brace is the usual cause.`,
+    );
+  }
+
+  try {
+    return validate(parsed, slug);
+  } catch (e) {
+    return fail(e instanceof Error ? e.message : String(e));
+  }
+}
+
 function readAll(): WorkMeta[] {
   if (!fs.existsSync(WORK_DIR)) return [];
 
   return fs
     .readdirSync(WORK_DIR, { withFileTypes: true })
     .filter((d) => d.isDirectory())
-    .map((d) => {
-      const file = path.join(WORK_DIR, d.name, "meta.json");
-      if (!fs.existsSync(file)) {
-        throw new Error(`content/work/${d.name}/ has no meta.json`);
-      }
-      return validate(JSON.parse(fs.readFileSync(file, "utf8")), d.name);
-    })
-    .sort((a, b) => b.order - a.order);
+    .map((d) => readOne(d.name))
+    .filter((w): w is WorkMeta => w !== null)
+    .sort((a, b) => b.order - a.order || a.slug.localeCompare(b.slug));
 }
 
 /** Every published folder under content/work/, validated and sorted. */

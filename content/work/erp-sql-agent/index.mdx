@@ -1,0 +1,136 @@
+---
+title: Asking the Data Warehouse in English
+subtitle: A chatbot inside the ERP that turns a plain question into SQL, runs it within the asker's own access level, and answers in a sentence.
+---
+
+<Metrics items={[
+  { value: "1–4 days", label: "the old wait for an answer" },
+  { value: "3", label: "architectures before one worked" },
+  { value: "0", label: "SQL the asker has to write" }
+]} />
+
+## The problem was a queue, not a query
+
+Someone in sales wants to know the quarterly order rate for a particular
+part from a particular client. A mechanical engineer wants to know how many
+times a machine failed last year and what the fault types were. A manager
+wants client ratings. Someone just wants to know what a machine cost two
+years ago, so they can sanity-check today's price.
+
+None of them write SQL. So all of them filed a ticket with the data team and
+waited — anywhere from one to four business days.
+
+That cost two people every time. The person who asked lost days on a
+question that was usually a single query. The data team spent their week
+writing other people's queries instead of doing their own work. And because
+asking was expensive, people asked less, which is the quiet cost: decisions
+get made on the number someone half-remembers rather than the one they could
+have looked up.
+
+The goal was to delete the queue.
+
+## Three attempts
+
+The first two didn't work, and how they failed is what shaped the third.
+
+**Knowledge graph with similarity search.** I modelled the warehouse as a
+graph and retrieved from it by similarity. It didn't work well. Finding
+things that *looked* related to the question wasn't the same as finding the
+things that actually answered it.
+
+**Plain RAG.** So I tried straightforward retrieval over the schema instead.
+This was better, and for a good number of questions the generated SQL was
+correct. But the warehouse was large and spread across multiple databases,
+and that's exactly where it fell apart: any question that needed columns
+from *different* databases produced SQL with the wrong joins between the
+wrong columns. Confidently wrong, which is the dangerous kind.
+
+<Callout kind="decision" title="Why both approaches failed in the same place">
+Retrieval finds text that resembles the question. But which table joins to
+which, and on which column, isn't in the text — it's structure. Ask for
+something that lives in one database and retrieval is enough. Ask for
+something spanning two and the join path *is* the answer, and it's precisely
+the part flat retrieval can't see.
+</Callout>
+
+**Agentic AI, with the knowledge graph demoted to a tool.** The third
+version didn't pick between the two approaches — it stopped treating either
+one as the pipeline. An agent sits at the centre and decides what to look
+up. The knowledge graph became one tool among several, and its specific job
+is resolving relationships between tables and columns across different
+databases. Retrieval is another tool. The agent reaches for whichever the
+question needs.
+
+That version passed all the test cases.
+
+The lesson I'd keep: the knowledge graph wasn't wrong, it was just in the
+wrong position. As *the* retrieval mechanism it underperformed. As a tool an
+agent calls when it needs to work out how two tables relate, it did the one
+thing nothing else could do.
+
+<Flow
+  caption="A question's path, from the ERP chat box to an answer."
+  steps={[
+    { label: "Question", note: "asked in plain English" },
+    { label: "Agent", note: "decides which tools to use" },
+    { label: "Knowledge graph", note: "how tables relate, across databases" },
+    { label: "SQL", note: "run within your access level" },
+    { label: "Answer", note: "text, chart, SQL on request" }
+  ]}
+/>
+
+## It lives where people already are
+
+The chatbot isn't a separate tool anyone has to remember exists. It's built
+into the internal ERP system — the one staff are already in daily to log
+time and do their work. Nothing new to open, no new login.
+
+That last part carries more weight than it sounds. People sign in with their
+Microsoft accounts, and Azure access groups already define which datasets
+each group can see — an intern doesn't have a manager's access. The chatbot
+is wired to those same groups. Ask about something your group doesn't have
+access to and it tells you so, rather than quietly answering.
+
+This mattered more than any model choice. A system that lets anyone ask
+anything about company data is a data breach with a nice interface. Grafting
+permissions on afterwards never really works; inheriting the ones the
+company already trusted meant the answer to "can she see this?" was the same
+answer it had always been.
+
+## Text first, SQL if you want it
+
+The answer comes back as plain text, with a chart if the question calls for
+one. The generated SQL is there too, behind a dropdown.
+
+That's deliberate. Most people asking what a part cost two years ago don't
+want to see a query — showing it would make the tool feel like it was for
+someone else. But the people who *can* read SQL are exactly the ones who'll
+ask whether they should trust it, and hiding the query from them would be a
+good reason not to. So it's one click away: invisible by default, available
+always.
+
+{/* TODO(ritika): two things worth adding when you have a moment —
+
+    1. Guardrails. Was the agent restricted to read-only queries? Any
+       validation of the generated SQL before it ran, or a cap on rows
+       returned? Interviewers ask this about anything with database
+       access, and "I thought about it" is a real differentiator.
+
+    2. Scale. You said it's in use — roughly how many people, or which
+       teams? And did the 1–4 day wait actually come down? Even "most
+       answers are immediate now" is better than leaving it open. */}
+
+## Where it ended up
+
+It's in use inside the company.
+
+{/* TODO(ritika): one honest paragraph on what you'd do differently.
+    Candidates, if any of them are true: the knowledge graph needing a
+    rebuild as schemas changed; not having a way to measure retrieval
+    quality before you started optimising it; something about the test
+    cases you'd write differently. Whatever's actually true. */}
+
+<Callout kind="note">
+Specifics of the schema and the data are omitted — those aren't mine to
+publish. The architecture and the reasoning are.
+</Callout>
