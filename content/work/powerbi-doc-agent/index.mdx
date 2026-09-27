@@ -1,0 +1,134 @@
+---
+title: A Documentation Generator for PowerBI
+subtitle: Upload a report, pick who the document is for, get it back written. Then ask an agent about any measure in the model.
+---
+
+<Metrics items={[
+  { value: "100s–1000s", label: "measures in one report" },
+  { value: "3", label: "documents written by hand, per project" },
+  { value: "1 day", label: "prototype that got me on the team" }
+]} />
+
+## Nobody wants to write the documentation
+
+In a large company every project produces a PowerBI report — visualisations,
+a data model, the numbers you put in front of stakeholders. For a serious
+project that report is not small. The data models are enormous, with
+hundreds to thousands of measures in them.
+
+Two things follow, and both are expensive.
+
+**Handover is slow.** Someone new takes over a report and has to work out
+what a thousand measures mean, one at a time. Even for someone already on
+the project, answering a passing question means going back into the model
+and hunting.
+
+**And the documentation is written three times.** A technical reader wants
+the DAX and the dependencies. A user wants to know what the numbers mean. An
+executive wants the summary. Those are three genuinely different documents,
+so somebody writes three genuinely different documents — by hand, for every
+project. It's a lot of time spent producing something nobody enjoys writing
+and everybody needs.
+
+## How I ended up on it
+
+I joined and there was no development project waiting for me. What was
+available was PowerBI analysis reports, which is real work but not the work
+I wanted to be doing.
+
+So my manager suggested I go and ask around — he gave me a few names of
+senior people who might have something. One of them, a senior data
+scientist, had just started an innovation project in the data department
+with one other data scientist. Two people, very early.
+
+I happened to have the exact overlap it needed: knowledge graphs, Python
+development, SQL, PowerBI and DAX. They were willing to consider me, but not
+convinced — reasonably. They'd been there for years and I'd been there
+days, with no track record to point at.
+
+So I built prototypes of what they were describing in a day, on generated
+data. That did the convincing, and I joined the project as its main
+developer.
+
+I'd rather record that honestly than pretend I was assigned to it. The
+lesson I took wasn't "prove yourself" — it was that a working prototype
+settles an argument about capability much faster than a conversation does.
+
+## What we built
+
+The tool is a generator with a deliberately short path through it.
+
+<Flow
+  caption="From a report nobody has documented to a document in Confluence."
+  steps={[
+    { label: "Upload", note: "the PowerBI report" },
+    { label: "Review", note: "the model, editable on screen" },
+    { label: "Choose", note: "technical, user or executive" },
+    { label: "Generate", note: "the document is written" },
+    { label: "Ship", note: "view, download, or push to Confluence" }
+  ]}
+/>
+
+You upload the report and see it on screen in an editable form, so anything
+the tool got wrong or thin can be corrected before generating. You pick who
+the document is for — technical, user, or executive — and generate. The
+result can be read in the application, downloaded as Word or PDF, or pushed
+straight into Confluence through a connector, which is where this
+documentation actually has to live to be useful.
+
+That last step matters more than it looks. A generated document that ends up
+in someone's downloads folder hasn't replaced the manual process; it's just
+moved it. Landing in Confluence is what makes it the real documentation
+rather than a draft of it.
+
+**Same model, three documents.** The point isn't that writing is automated —
+it's that the three audiences stop being three separate writing jobs. One
+source, three renderings, generated on demand.
+
+## The agent
+
+The second half is a bot I built start to finish, on my own.
+
+It's an agentic AI that knows the documentation. You can ask it about the
+measures in general or about one specific measure. You can ask it to explain
+the data model. And you can ask it to edit parts of the documentation
+directly, rather than generating the whole thing again to change a
+paragraph.
+
+<Callout kind="decision" title="Why a document you can talk to">
+A generated document is still a document — you read it top to bottom to find
+one definition. Most people arrive with a specific question, not a desire to
+read. The agent turns the generated documentation from something you read
+into something you query, which is how people actually use reference
+material.
+</Callout>
+
+## Who did what
+
+Three of us. One senior data scientist led the ideation, the other did all
+the testing, and I was the main developer — I built the generator, and the
+agent end to end.
+
+{/* TODO(ritika): four things to add when you have time —
+
+    1. What you tried FIRST that didn't work. Every other page benefits
+       from this and this one has a gap where it should be.
+
+    2. How you got at the PowerBI model — REST API, XMLA endpoint,
+       parsing the .pbix, something else? And which part fought you.
+
+    3. The 40% less manual effort and 30% faster query turnaround from
+       your resume. Were those measured, or the team's estimate? Say
+       which — a measured number invites a good follow-up question, an
+       unsourced one invites scepticism. Once you tell me, I'll add them
+       to the metrics at the top of this page.
+
+    4. NASA was among the clients. Did that change anything concrete —
+       review process, data handling, a documentation standard you had
+       to match? If it was mostly just who the work was for, that's
+       fine, and I'll leave it as the single line it is now. */}
+
+<Callout kind="note">
+Specifics of the reports and the data models are omitted — those belong to
+the company and its clients. The architecture and the reasoning are mine.
+</Callout>

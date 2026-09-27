@@ -1,0 +1,14 @@
+{
+  "slug": "powerbi-doc-agent",
+  "title": "A Documentation Generator for PowerBI",
+  "org": "Atlas Copco",
+  "role": "Data Science Intern",
+  "category": "Professional",
+  "order": 99,
+  "featured": true,
+  "dates": "Jan 2025 – Jul 2025",
+  "location": "Pune, IN",
+  "blurb": "An innovation project that turns a PowerBI report into technical, user and executive documentation on demand — plus an agent you can ask about any measure in the model. I was the main developer; NASA was among the clients.",
+  "tags": ["LLM", "Agentic AI", "PowerBI", "DAX", "Python", "Documentation"],
+  "links": []
+}
