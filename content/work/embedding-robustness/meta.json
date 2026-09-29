@@ -1,18 +1,24 @@
 {
   "slug": "embedding-robustness",
-  "title": "Word Embedding Robustness Evaluation Framework",
+  "title": "Which Word Embeddings Survive Data Poisoning",
   "category": "Project",
   "order": 95,
   "featured": true,
-  "draft": true,
   "dates": "Dec 2025 \u2013 Feb 2026",
-  "blurb": "A Python framework that measures how badly data poisoning degrades Word2Vec, FastText, GloVe and BERT embeddings \u2014 three attack strategies, automated training pipelines, multiple evaluation metrics.",
+  "blurb": "A framework that poisons a training corpus on purpose and measures what it does to five embedding methods \u2014 Word2Vec, FastText, GloVe, and DistilBERT frozen and fine-tuned. Three attack types, three doses, two target words chosen for frequency.",
   "tags": [
     "PyTorch",
-    "TensorFlow",
+    "Transformers",
+    "Gensim",
     "NLP",
     "Embeddings",
     "Adversarial ML"
   ],
-  "links": []
+  "links": [
+    {
+      "type": "repo",
+      "label": "Source on GitHub",
+      "url": "https://github.com/ritxz21/Data-Poisoning"
+    }
+  ]
 }

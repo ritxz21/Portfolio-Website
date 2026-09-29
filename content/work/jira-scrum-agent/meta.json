@@ -1,0 +1,14 @@
+{
+  "slug": "jira-scrum-agent",
+  "title": "A Scrum Agent That Sits in Standups",
+  "org": "Atlas Copco",
+  "role": "Data Science Intern",
+  "category": "Professional",
+  "order": 98,
+  "featured": false,
+  "dates": "Jan 2025 – Jul 2025",
+  "location": "Pune, IN",
+  "blurb": "An agent that joins the daily standup, transcribes what everyone says, and updates the JIRA board from it — adding and removing cards, flagging blockers. In testing when I left for my Masters; handed over to the development team.",
+  "tags": ["Agentic AI", "Speech to Text", "JIRA", "Python", "LLM"],
+  "links": []
+}

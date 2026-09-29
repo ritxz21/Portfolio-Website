@@ -1,0 +1,91 @@
+---
+title: A Scrum Agent That Sits in Standups
+subtitle: The team already says what changed, out loud, every morning. The agent listens and moves the board to match.
+---
+
+<Metrics items={[
+  { value: "3", label: "questions every standup asks" },
+  { value: "0", label: "ticket IDs anyone says out loud" },
+  { value: "Testing", label: "where it was when I left" }
+]} />
+
+## The board is always slightly wrong
+
+Every morning the team has a standup. Three questions, one at a time: what
+did you work on yesterday, what's the plan today, anything blocking you.
+
+In those fifteen minutes the team says everything the board needs to know.
+Work moved. Something finished. Something new appeared. Someone is stuck on
+a thing nobody else knew about.
+
+Then the meeting ends, and updating JIRA to reflect any of it is a separate
+chore that someone has to remember to do. Usually they half-do it. So the
+board drifts away from reality, and by the time anyone looks at it to plan
+something, it's describing a version of the sprint that stopped being true
+several days ago.
+
+The information was never missing. It just never made it from the meeting to
+the board.
+
+## Listening, then acting
+
+The agent joins the standup and transcribes the speech. Then it works out
+what the updates actually mean for the board, and makes the changes —
+adding cards, removing ones that are done or no longer real, flagging the
+blockers people mentioned out loud.
+
+<Flow
+  caption="From something someone said to something the board shows."
+  steps={[
+    { label: "Standup", note: "the usual three questions" },
+    { label: "Transcribe", note: "speech to text" },
+    { label: "Interpret", note: "what changed, and for whom" },
+    { label: "JIRA", note: "cards added, closed, blockers raised" }
+  ]}
+/>
+
+## Who said that
+
+The part I liked most was also the simplest.
+
+People join the standup from their work accounts — the same accounts they're
+logged into JIRA with. So the agent doesn't have to work out who's speaking
+from the audio, or ask, or guess from names. The meeting attendee and the
+JIRA user are already the same identity, and it just uses it.
+
+<Callout kind="decision" title="Use the identity that already exists">
+Speaker identification from audio is a hard problem with a mediocre success
+rate. Matching names to usernames is a guessing game that fails on nicknames
+and people who share a first name. But the company had already solved this —
+everyone in the meeting was authenticated, and that authentication was the
+same one JIRA used. The hard version of the problem didn't need solving; it
+needed noticing that it was already solved somewhere else.
+</Callout>
+
+## Where it got to
+
+It was in testing when I left for New York to start my Masters, so I handed
+it over to the development team rather than seeing it deployed.
+
+That's the honest ending. It worked well enough to be tested, not long
+enough for me to find out how it behaved with a team that hadn't been told
+it was there.
+
+{/* TODO(ritika): three things that would round this page out —
+
+    1. How did it know WHICH ticket someone meant? People in standups say
+       "the login thing" or "that bug from yesterday", not ticket IDs.
+       This is the genuinely hard problem in the project and the page
+       currently skips it. Even "it matched against open tickets assigned
+       to that person" would be enough.
+
+    2. Did a human approve changes before they hit the board, or did the
+       agent write directly? For something that can DELETE cards, that
+       answer matters a lot, and interviewers will ask.
+
+    3. What you tried first that didn't work. Every other page has this
+       and it's the part people remember. */}
+
+## Who built it
+
+My manager and me. He set the requirements; I did the development.
